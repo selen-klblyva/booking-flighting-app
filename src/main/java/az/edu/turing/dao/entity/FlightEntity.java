@@ -94,4 +94,6 @@ public class FlightEntity {
                 ", numberOfSeats=" + numberOfSeats +
                 '}';
     }
+
+
 }
