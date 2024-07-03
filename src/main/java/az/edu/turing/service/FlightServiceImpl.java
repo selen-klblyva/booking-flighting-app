@@ -7,6 +7,8 @@ import az.edu.turing.dto.CriteriaDto;
 import az.edu.turing.dto.FlightDto;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,27 +43,56 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<FlightDto> findFlightByOrigin(String origin) {
-        return flightDao.findByOrigin(String origin).stream()
-                .map()
+        return flightDao.findByOrigin(origin).stream()
+                 .map(flight -> new FlightDto(flight.getId(),
+                         flight.getOrigin(),flight.getDestination(),
+                         flight.getDepartureTime(),flight.getNumberOfSeats()))
+                 .collect(Collectors.toList());
     }
 
     @Override
     public FlightDto findFlightById(long flightId) {
-        FlightEntity flightDto=flightDao.findById(flightId);
-        if(flightDto==null){
-            System.out.println("flight not found");
-        }
-        return new FlightDto(.getOrigin(),flightDto.getDestination(),
-                flightDto.getDepartureTime(),flightDto.getNumberOfSeats());
+            FlightEntity flightEntity=flightDao.findById(flightId);
+            if(flightEntity==null){
+                System.out.println("Flight will not find by id");
+            }
+            return new FlightDto(flightEntity.getId(),flightEntity.getOrigin(),
+                    flightEntity.getDestination(),flightEntity.getDepartureTime(),flightEntity.getNumberOfSeats());
     }
 
     @Override
     public List<FlightDto> getNext24HoursFlights(Cities origin) {
-        return List.of();
+           List<FlightEntity> entities=flightDao.findAll();
+           try{
+               return entities.stream().filter(entity ->
+                       entity.getOrigin().equals(origin) &&
+                       entity.getDepartureTime().isAfter(LocalDateTime.now()) &&
+                       entity.getDepartureTime().isBefore(LocalDateTime.now().plusHours(24)))
+                       .map(flight -> new FlightDto(flight.getId(),flight.
+                               getOrigin(),flight.getDestination(),flight.getDepartureTime(),flight.getNumberOfSeats()))
+                       .collect(Collectors.toList());
+
+           }catch(Exception e){
+               System.out.println("Error while fetching next 24 hours flights: "+e.getMessage());
+               return new ArrayList<>();
+           }
     }
 
     @Override
     public List<FlightDto> getFlightByCriteria(CriteriaDto criteria) {
-        return List.of();
+        List<FlightEntity> entities=flightDao.findAll();
+        try{
+            return entities.stream().filter(entity ->
+                    entity.getDestination().equals(criteria.getDestination()) &&
+                    entity.getDepartureTime().equals(criteria.getTime()) &&
+                            entity.getNumberOfSeats()>=criteria.getSeats())
+                    .map(flight-> new FlightDto(flight.getId(),flight.getOrigin(),
+                            flight.getDestination(),flight.getDepartureTime(),flight.getNumberOfSeats()))
+                    .collect(Collectors.toList());
+        }catch(Exception e){
+            System.out.println("It will give us error:"+e.getMessage());
+            return new ArrayList<>();
+        }
+
     }
 }
