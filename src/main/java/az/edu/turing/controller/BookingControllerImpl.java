@@ -30,7 +30,7 @@ public class BookingControllerImpl implements BookingController {
 
     @Override
     public BookingDto getBookingById(long bookingId) {
-        bookingService.getBookingById(bookingId);
+        return getBookingById(bookingId);
     }
 
     @Override

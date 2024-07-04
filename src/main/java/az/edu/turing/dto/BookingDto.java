@@ -55,7 +55,7 @@ public class BookingDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingEntity that = (BookingEntity) o;
-        return id == that.getId() && flightId == that.getFlightId() && Objects.equals(passengerNames, that.getPassengerNames());
+        return id == that.getId() && flightId == that.getFlightId() && Objects.equals(passengerNames, that.getPassengerName());
     }
 
     @Override

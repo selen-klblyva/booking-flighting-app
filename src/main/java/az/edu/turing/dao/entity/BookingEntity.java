@@ -19,7 +19,7 @@ public class BookingEntity {
         this.passengerNames = passengerNames;
     }
 
-    public BookingEntity(long flightId, List<String> passengerNames) {
+    public BookingEntity(long flightId, List<String> passengerName) {
         this.flightId = flightId;
         this.passengerNames = passengerNames;
     }
@@ -40,11 +40,11 @@ public class BookingEntity {
         this.id = id;
     }
 
-    public List<String> getPassengerNames() {
+    public List<String> getPassengerName() {
         return passengerNames;
     }
 
-    public void setPassengerNames(List<String> passengerNames) {
+    public void setPassengerName(List<String> passengerName) {
         this.passengerNames = passengerNames;
     }
 
